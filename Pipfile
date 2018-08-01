@@ -8,6 +8,8 @@ name = "pypi"
 [packages]
 "bs4" = "*"
 requests = "*"
+prometheus-client = "*"
+nltk = "*"
 
 [requires]
 python_version = "2.7"
