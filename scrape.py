@@ -6,58 +6,67 @@ from urllib.request import urlopen
 import requests
 import re
 
-sid = SentimentIntensityAnalyzer()
+class Scraper:
+    """Scrape a webpage for reviews, process the review, and determine which reviews are most likely to be fake."""
 
-def check_network():
-    try:
-        urllib2.urlopen('http://216.58.192.142', timeout=1)
-        return True
-    except urllib2.URLError as err: 
-        return False
+    def __init__(self):
+        self.url = 'https://www.dealerrater.com/dealer/McKaig-Chevrolet-Buick-A-Dealer-For-The-People-dealer-reviews-23685/page{}/?filter=ALL_REVIEWS#link'
+        self.sid = SentimentIntensityAnalyzer()
 
-def scrape_pages():
-    for i in range(1, 6):
-        page = requests.get(('https://www.dealerrater.com/dealer/McKaig-Chevrolet-Buick-A-Dealer-For-The-People-dealer-reviews-23685/page{}/?filter=ALL_REVIEWS#link').format(i))
-        parse_content(page)
+    def check_network(self):
+        """Test outbound network connection."""
+        try:
+            urlopen('http://216.58.192.142', timeout=1)
+            return True
+        except urllib2.URLError as err: 
+            return False
 
+    def get_pages(self):
+        """HTTP request to retrieve pages, uses hardcode range for multiple pages of reviews"""
+        pages = []
+        for i in range(1, 6):
+            page = requests.get((self.url).format(i))
+            pages.append(page)
+        return pages
 
-    reviews = []
+    def process_reviews(self, pages):
+        """Ties together other class functions to generate list of dictionaries containing all processed review data"""
+        reviews = []
+        for page in pages:
+            soup = BeautifulSoup(page.content, 'lxml')
+            for review in soup.find_all(class_="review-entry"):
+                review_text = review.find(class_="review-content").get_text()
+                perfect_score = True
 
-    for review in soup.find_all(class_="review-entry"):
-        # just a bunch of find commands? or maybe keep a list of things i'm interested in so it can be another loop
-        review_text = review.find(class_="review-content").get_text()
-        perfect_score = True
+                ratings = review.find_all(class_="rating-static")
+                ratings_count = len(ratings)
+                sentiment = self.process_sentiment(review_text)
 
-        ratings = review.find_all(class_="rating-static")
-        ratings_count = len(ratings)
+                for rating in ratings:
+                    rating_num = re.search(r'rating-(\d+)', str(rating))
+                    if rating_num.group(1) != "50":
+                        perfect_score = False
+            
+                review_dict = {'review_text': review_text, 'perfect_score': perfect_score, 'ratings_count': ratings_count, 'positive_score': sentiment['pos']}
+                reviews.append(review_dict)
+        return reviews
 
-        # use a tuple to store ratings, tuples don't have duplicates, if the length is 1 and the only element is 50 then it gets a perfect score
-        for rating in ratings:
-            rating_num = re.search(r'rating-(\d+)', str(rating))
-            if rating_num.group(1) != 50:
-                perfect_score = False
-    
-        review_dict = {'review_text': review_text, 'perfect_score': perfect_score, 'ratings_count': ratings_count}
-        reviews.append(review_dict)
-        print(reviews)
-#print(soup.find(id="reviews").prettify())
+    def remove_imperfect_scored(self, reviews):
+        """List comprehension to remove all reviews without perfect start ratings, if less than 3 such reviews exist, it returns the original review array"""
+        perfect_reviews = [x for x in reviews if x['perfect_score'] == True]
+        if len(perfect_reviews > 3):
+            return perfect_reviews
+        else:
+            return reviews
 
-def parse_content(page):
-    soup = BeautifulSoup(page.content, 'lxml')
-    print(page)
+    def process_sentiment(self, text):
+        """Runs sentiment using NLTK vader to determine positive, negative, and neutral score of the review text"""
+        ss = self.sid.polarity_scores(text)
+        return ss
 
-def process_sentiment(text):
-     print(text)
-     ss = sid.polarity_scores(text)
-     for k in ss:
-         print('{0}: {1}, '.format(k, ss[k]))
-     print()
-
-
-if __name__ == "__main__":
-    nltk.download('vader_lexicon')
-    process_sentiment("this book is great at being terrible")
-    #check_network()
-    #scrape_pages()
-    
+    def print_fakes(self, reviews):
+        """Prints the top 3 reviews most likely to be fake as determined by highest sentiment scores and perfect star ratings"""
+        newlist = sorted(reviews, key=lambda k: k['positive_score'], reverse=True)
+        print(len(reviews))
+        print(newlist[:3])
 

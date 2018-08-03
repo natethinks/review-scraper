@@ -10,6 +10,7 @@ name = "pypi"
 requests = "*"
 prometheus-client = "*"
 nltk = "*"
+twython = "*"
 
 [requires]
 python_version = "2.7"

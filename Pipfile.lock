@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ca69e2f717676aae4c1687152aa42cfffa26b3bf5515abdd471fb6bdc58b9ae3"
+            "sha256": "f117f7109de644149d2840f12fc861b98f1812e07d59454d5ac54c35ec115bdf"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -59,6 +59,13 @@
             "index": "pypi",
             "version": "==3.3.0"
         },
+        "oauthlib": {
+            "hashes": [
+                "sha256:ac35665a61c1685c56336bda97d5eefa246f1202618a1d6f34fccb1bdd404162",
+                "sha256:d883b36b21a6ad813953803edfa563b1b579d79ca758fe950d1bc9e8b326025b"
+            ],
+            "version": "==2.1.0"
+        },
         "prometheus-client": {
             "hashes": [
                 "sha256:17bc24c09431644f7c65d7bce9f4237252308070b6395d6d8e87767afe867e24"
@@ -74,12 +81,26 @@
             "index": "pypi",
             "version": "==2.19.1"
         },
+        "requests-oauthlib": {
+            "hashes": [
+                "sha256:8886bfec5ad7afb391ed5443b1f697c6f4ae98d0e5620839d8b4499c032ada3f",
+                "sha256:e21232e2465808c0e892e0e4dbb8c2faafec16ac6dc067dd546e9b466f3deac8"
+            ],
+            "version": "==1.0.0"
+        },
         "six": {
             "hashes": [
                 "sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9",
                 "sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"
             ],
             "version": "==1.11.0"
+        },
+        "twython": {
+            "hashes": [
+                "sha256:24ae29b4dd8d69df81707eb5fb7a1babd6689a3d69cd618f0647997d6179d338"
+            ],
+            "index": "pypi",
+            "version": "==3.7.0"
         },
         "urllib3": {
             "hashes": [
