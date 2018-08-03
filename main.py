@@ -1,4 +1,5 @@
 from scrape import Scraper
+import pprint
 
 if __name__ == "__main__":
     scraper = Scraper()
@@ -6,6 +7,5 @@ if __name__ == "__main__":
         print("network error")
     pages = scraper.get_pages()
     reviews = scraper.process_reviews(pages)
-    scraper.print_fakes(reviews)
-    
-
+    fakes = scraper.get_fakes(reviews)
+    pprint.pprint(fakes[:3])

@@ -3,7 +3,6 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from urllib.request import urlopen
 import requests
 import re
-import pprint
 import nltk
 
 class Scraper():
@@ -64,9 +63,8 @@ class Scraper():
         ss = self.sid.polarity_scores(text)
         return ss
 
-    def print_fakes(self, reviews):
+    def get_fakes(self, reviews):
         """Prints the top 3 reviews most likely to be fake as determined by highest sentiment scores and perfect star ratings"""
         newList = self.remove_imperfect_scored_reviews(reviews)
         newlist = sorted(reviews, key=lambda k: k['positive_score'], reverse=True)
-        print(len(reviews))
-        pprint.pprint(newlist[:3])
+        return newlist

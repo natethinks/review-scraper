@@ -31,9 +31,14 @@ class ScraperTest(unittest.TestCase):
         negText = "Everything is terrible and horrible at the same time"
         negExpected = {'neg': 0.485, 'neu': 0.515, 'pos': 0.0, 'compound': -0.765}
         posRes = self.scraper.process_sentiment(posText)
-        self.assertTrue(posRes, posExpected)
+        self.assertEqual(posRes, posExpected)
         negRes = self.scraper.process_sentiment(negText)
-        self.assertTrue(negRes, negExpected)
+        self.assertEqual(negRes, negExpected)
+
+    def test_get_fakes(self):
+        reviews = self.scraper.process_reviews(self.pages)
+        fakes = self.scraper.get_fakes(reviews)
+        self.assertEqual(len(fakes), 3)
 
 if __name__ == '__main__':
     unittest.main()
