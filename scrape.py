@@ -5,8 +5,9 @@ import requests
 import re
 import pprint
 import nltk
+import unittest
 
-class Scraper:
+class Scraper(unittest.TestCase):
     """Scrape a webpage for reviews, process the review, and determine which reviews are most likely to be fake."""
 
     def __init__(self):
@@ -70,3 +71,10 @@ class Scraper:
         print(len(reviews))
         pprint.pprint(newlist[:3])
 
+    """ Unit Tests """
+    def test_get_pages():
+        pages = get_pages()
+        self.assertEqual(len(pages), 5)
+
+if __name__ == '__main__':
+    unittest.main()
