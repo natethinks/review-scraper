@@ -5,9 +5,8 @@ import requests
 import re
 import pprint
 import nltk
-import unittest
 
-class Scraper(unittest.TestCase):
+class Scraper():
     """Scrape a webpage for reviews, process the review, and determine which reviews are most likely to be fake."""
 
     def __init__(self):
@@ -52,10 +51,10 @@ class Scraper(unittest.TestCase):
                 reviews.append(review_dict)
         return reviews
 
-    def remove_imperfect_scored(self, reviews):
+    def remove_imperfect_scored_reviews(self, reviews):
         """List comprehension to remove all reviews without perfect start ratings, if less than 3 such reviews exist, it returns the original review array"""
         perfect_reviews = [x for x in reviews if x['perfect_score'] == True]
-        if len(perfect_reviews > 3):
+        if len(perfect_reviews) > 3:
             return perfect_reviews
         else:
             return reviews
@@ -67,14 +66,7 @@ class Scraper(unittest.TestCase):
 
     def print_fakes(self, reviews):
         """Prints the top 3 reviews most likely to be fake as determined by highest sentiment scores and perfect star ratings"""
+        newList = self.remove_imperfect_scored_reviews(reviews)
         newlist = sorted(reviews, key=lambda k: k['positive_score'], reverse=True)
         print(len(reviews))
         pprint.pprint(newlist[:3])
-
-    """ Unit Tests """
-    def test_get_pages():
-        pages = get_pages()
-        self.assertEqual(len(pages), 5)
-
-if __name__ == '__main__':
-    unittest.main()
