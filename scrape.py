@@ -1,10 +1,10 @@
 from bs4 import BeautifulSoup
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-import nltk
 from urllib.request import urlopen
-
 import requests
 import re
+import pprint
+import nltk
 
 class Scraper:
     """Scrape a webpage for reviews, process the review, and determine which reviews are most likely to be fake."""
@@ -68,5 +68,5 @@ class Scraper:
         """Prints the top 3 reviews most likely to be fake as determined by highest sentiment scores and perfect star ratings"""
         newlist = sorted(reviews, key=lambda k: k['positive_score'], reverse=True)
         print(len(reviews))
-        print(newlist[:3])
+        pprint.pprint(newlist[:3])
 
