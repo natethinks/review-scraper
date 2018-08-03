@@ -13,7 +13,7 @@ class Scraper():
         self.sid = SentimentIntensityAnalyzer()
 
     def check_network(self):
-        """Test outbound network connection."""
+        """Test for successful outbound network connection."""
         try:
             urlopen('http://216.58.192.142', timeout=1)
             return True
@@ -50,6 +50,11 @@ class Scraper():
                 reviews.append(review_dict)
         return reviews
 
+    def process_sentiment(self, text):
+        """Runs sentiment using NLTK vader to determine positive, negative, and neutral score of the review text, currently only positive is used"""
+        ss = self.sid.polarity_scores(text)
+        return ss
+
     def remove_imperfect_scored_reviews(self, reviews):
         """List comprehension to remove all reviews without perfect start ratings, if less than 3 such reviews exist, it returns the original review array"""
         perfect_reviews = [x for x in reviews if x['perfect_score'] == True]
@@ -58,13 +63,8 @@ class Scraper():
         else:
             return reviews
 
-    def process_sentiment(self, text):
-        """Runs sentiment using NLTK vader to determine positive, negative, and neutral score of the review text"""
-        ss = self.sid.polarity_scores(text)
-        return ss
-
     def get_fakes(self, reviews):
-        """Prints the top 3 reviews most likely to be fake as determined by highest sentiment scores and perfect star ratings"""
+        """Returns the top 3 reviews most likely to be fake as determined by highest sentiment scores and perfect star ratings"""
         newList = self.remove_imperfect_scored_reviews(reviews)
         newlist = sorted(reviews, key=lambda k: k['positive_score'], reverse=True)
         return newlist

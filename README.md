@@ -31,3 +31,10 @@ docker run -v /Users/$USER/nltk_data/:/root/nltk_data/ scraper
 pip3 install -r requirements.txt
 python3 scrape_test.py
 ```
+
+### To-do
+- In app health reporting (prometheus)
+- Support retrieving addresses to be scraped from kafka or rabbitmq
+- Multiple stratgies for determining fake reviews
+- Custom NLP model for reviews
+- More error catches and handling
