@@ -3,7 +3,7 @@ bs4==0.0.1
 certifi==2018.4.16
 chardet==3.0.4
 idna==2.7
-lxml==4.2.3
+lxml==4.6.5
 nltk==3.3
 pipenv==2018.7.1
 prometheus-client==0.3.1
